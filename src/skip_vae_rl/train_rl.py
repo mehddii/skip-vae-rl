@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from stable_baselines3 import PPO
 from stable_baselines3.common.evaluation import evaluate_policy
+from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.policies import ActorCriticPolicy
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from stable_baselines3.common.vec_env import DummyVecEnv, VecTransposeImage
@@ -51,7 +52,7 @@ class VAEFeatureExtractor(BaseFeaturesExtractor):
 
 def build_vec_env(env_id: str, image_size: int, seed: int) -> VecTransposeImage:
     def thunk():
-        return make_env(env_id, image_size=image_size, seed=seed)
+        return Monitor(make_env(env_id, image_size=image_size, seed=seed))
 
     return VecTransposeImage(DummyVecEnv([thunk]))
 
@@ -126,4 +127,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
