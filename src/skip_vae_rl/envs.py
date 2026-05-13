@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import gymnasium as gym
+import minigrid  # noqa: F401  Registers MiniGrid environments with Gymnasium.
 import numpy as np
 from gymnasium import ObservationWrapper
 from gymnasium.spaces import Box
@@ -37,4 +38,3 @@ def make_env(env_id: str, image_size: int, seed: int | None = None) -> gym.Env:
     if seed is not None:
         env.reset(seed=seed)
     return env
-

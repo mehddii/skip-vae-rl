@@ -17,6 +17,7 @@ dependencies = [
   "torch>=2.1.0",
   "torchvision>=0.16.0",
   "tqdm>=4.66.0",
+  "wrapt>=1.16.0",
 ]
 
 [project.optional-dependencies]
@@ -36,4 +37,3 @@ packages = ["src/skip_vae_rl"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-
