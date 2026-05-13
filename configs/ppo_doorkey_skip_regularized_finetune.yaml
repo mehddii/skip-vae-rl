@@ -1,0 +1,26 @@
+seed: 41
+run_dir: runs/ppo_doorkey_skip_regularized_finetune
+
+env:
+  id: MiniGrid-DoorKey-8x8-v0
+  image_size: 64
+
+rl:
+  total_timesteps: 700000
+  learning_rate: 0.0001
+  n_steps: 512
+  batch_size: 128
+  n_epochs: 4
+  gamma: 0.99
+  num_eval_seeds: 5
+  eval_episodes_per_seed: 5
+
+encoder:
+  mode: pretrained
+  checkpoint: runs/skip_vae_regularized_doorkey/best.pt
+  model_type: skip_vae
+  latent_dim: 64
+  frozen: false
+  skip_dropout: 0.5
+  skip_scale: 0.5
+

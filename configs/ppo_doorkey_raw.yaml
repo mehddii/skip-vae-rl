@@ -1,0 +1,20 @@
+seed: 41
+run_dir: runs/ppo_doorkey_raw
+
+env:
+  id: MiniGrid-DoorKey-8x8-v0
+  image_size: 64
+
+rl:
+  total_timesteps: 700000
+  learning_rate: 0.0003
+  n_steps: 512
+  batch_size: 128
+  n_epochs: 4
+  gamma: 0.99
+  num_eval_seeds: 5
+  eval_episodes_per_seed: 5
+
+encoder:
+  mode: raw
+

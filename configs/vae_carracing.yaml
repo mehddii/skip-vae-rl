@@ -1,0 +1,27 @@
+seed: 51
+device: auto
+run_dir: runs/vae_carracing
+fig_dir: reports/figures
+
+env:
+  id: CarRacing-v3
+  image_size: 64
+
+dataset:
+  path: runs/datasets/carracing_80k.npz
+  collect_if_missing: true
+  num_frames: 80000
+
+model:
+  type: vae
+  in_channels: 3
+  latent_dim: 64
+  beta: 1.0
+
+training:
+  batch_size: 128
+  epochs: 30
+  learning_rate: 0.0003
+  num_workers: 2
+  save_every_epochs: 5
+

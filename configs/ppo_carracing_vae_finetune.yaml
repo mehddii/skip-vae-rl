@@ -1,0 +1,24 @@
+seed: 61
+run_dir: runs/ppo_carracing_vae_finetune
+
+env:
+  id: CarRacing-v3
+  image_size: 64
+
+rl:
+  total_timesteps: 500000
+  learning_rate: 0.0001
+  n_steps: 1024
+  batch_size: 128
+  n_epochs: 4
+  gamma: 0.99
+  num_eval_seeds: 3
+  eval_episodes_per_seed: 3
+
+encoder:
+  mode: pretrained
+  checkpoint: runs/vae_carracing/best.pt
+  model_type: vae
+  latent_dim: 64
+  frozen: false
+

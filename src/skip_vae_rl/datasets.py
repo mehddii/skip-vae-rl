@@ -40,7 +40,10 @@ def collect_random_frames(
 
     for _ in tqdm(range(num_frames), desc="collecting frames"):
         frames.append(obs)
-        action = int(rng.integers(env.action_space.n))
+        if hasattr(env.action_space, "n"):
+            action = int(rng.integers(env.action_space.n))
+        else:
+            action = env.action_space.sample()
         obs, _, terminated, truncated, _ = env.step(action)
         if terminated or truncated:
             obs, _ = env.reset()
@@ -66,4 +69,3 @@ def load_or_collect_frames(
     if not collect_if_missing:
         raise FileNotFoundError(f"Dataset not found: {path}")
     return collect_random_frames(path, env_id, image_size, num_frames, seed)
-

@@ -1,0 +1,25 @@
+seed: 31
+device: auto
+run_dir: runs/vae_doorkey
+fig_dir: reports/figures
+
+env:
+  id: MiniGrid-DoorKey-8x8-v0
+  image_size: 64
+
+dataset:
+  path: runs/datasets/minigrid_doorkey_80k.npz
+  collect_if_missing: false
+  num_frames: 80000
+
+model:
+  type: vae
+  in_channels: 3
+  latent_dim: 64
+  beta: 1.0
+
+visualization:
+  checkpoint: runs/vae_doorkey/best.pt
+  num_points: 3000
+  method: pca
+

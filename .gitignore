@@ -4,6 +4,7 @@ __pycache__/
 *.zip
 .ipynb_checkpoints/
 skip-vae-rl.ipynb
+kaggle_strong_experiment.ipynb
 
 runs/*
 !runs/.gitkeep
@@ -11,4 +12,3 @@ runs/*
 reports/figures/*
 !reports/figures/.gitkeep
 reports/results_summary.csv
-
