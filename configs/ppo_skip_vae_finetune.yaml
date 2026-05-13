@@ -1,0 +1,23 @@
+seed: 21
+run_dir: runs/ppo_skip_vae_finetune
+
+env:
+  id: MiniGrid-Empty-16x16-v0
+  image_size: 64
+
+rl:
+  total_timesteps: 300000
+  learning_rate: 0.0001
+  n_steps: 512
+  batch_size: 128
+  n_epochs: 4
+  gamma: 0.99
+  eval_episodes: 20
+
+encoder:
+  mode: pretrained
+  checkpoint: runs/skip_vae_minigrid/best.pt
+  model_type: skip_vae
+  latent_dim: 64
+  frozen: false
+

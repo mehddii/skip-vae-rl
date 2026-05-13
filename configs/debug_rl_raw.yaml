@@ -1,0 +1,19 @@
+seed: 7
+run_dir: runs/debug_rl_raw
+
+env:
+  id: MiniGrid-Empty-8x8-v0
+  image_size: 64
+
+rl:
+  total_timesteps: 5000
+  learning_rate: 0.0003
+  n_steps: 128
+  batch_size: 64
+  n_epochs: 4
+  gamma: 0.99
+  eval_episodes: 5
+
+encoder:
+  mode: raw
+
