@@ -13,7 +13,8 @@ rl:
   n_epochs: 4
   gamma: 0.99
   eval_episodes: 5
+  num_eval_seeds: 1
+  eval_episodes_per_seed: 5
 
 encoder:
   mode: raw
-

@@ -25,8 +25,11 @@ Recommended comparison:
 ```text
 1. PPO from raw pixels
 2. PPO with a frozen standard VAE encoder
-3. PPO with a frozen Skip-VAE encoder
-4. PPO with a fine-tuned Skip-VAE encoder
+3. PPO with a fine-tuned standard VAE encoder
+4. PPO with a frozen naive Skip-VAE encoder
+5. PPO with a fine-tuned naive Skip-VAE encoder
+6. PPO with a frozen regularized Skip-VAE encoder
+7. PPO with a fine-tuned regularized Skip-VAE encoder
 ```
 
 Extra ablations:
@@ -78,6 +81,12 @@ Train a Skip-VAE:
 uv run python -m skip_vae_rl.train_vae --config configs/skip_vae_minigrid.yaml
 ```
 
+Train a regularized Skip-VAE that uses skip dropout and skip scaling:
+
+```bash
+uv run python -m skip_vae_rl.train_vae --config configs/skip_vae_regularized_minigrid.yaml
+```
+
 Train PPO from raw pixels:
 
 ```bash
@@ -88,6 +97,12 @@ Train PPO using a frozen Skip-VAE encoder:
 
 ```bash
 uv run python -m skip_vae_rl.train_rl --config configs/ppo_skip_vae_frozen.yaml
+```
+
+Aggregate RL results:
+
+```bash
+uv run python -m skip_vae_rl.aggregate_results
 ```
 
 Visualize latent space:
@@ -120,4 +135,3 @@ debug: 1k frames, 2 VAE epochs, 5k PPO steps
 small: 10k frames, 10 VAE epochs, 50k PPO steps
 final: 50k-100k frames, 30-50 VAE epochs, 300k-1M PPO steps
 ```
-

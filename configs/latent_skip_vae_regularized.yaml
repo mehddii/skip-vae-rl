@@ -1,0 +1,27 @@
+seed: 13
+device: auto
+run_dir: runs/skip_vae_regularized_minigrid
+fig_dir: reports/figures
+
+env:
+  id: MiniGrid-Empty-16x16-v0
+  image_size: 64
+
+dataset:
+  path: runs/datasets/minigrid_empty_100k.npz
+  collect_if_missing: false
+  num_frames: 100000
+
+model:
+  type: skip_vae
+  in_channels: 3
+  latent_dim: 64
+  beta: 0.1
+  skip_dropout: 0.5
+  skip_scale: 0.5
+
+visualization:
+  checkpoint: runs/skip_vae_regularized_minigrid/best.pt
+  num_points: 3000
+  method: pca
+

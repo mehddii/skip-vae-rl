@@ -1,5 +1,5 @@
 seed: 21
-run_dir: runs/ppo_skip_vae_finetune
+run_dir: runs/ppo_skip_vae_regularized_finetune
 
 env:
   id: MiniGrid-Empty-16x16-v0
@@ -17,7 +17,10 @@ rl:
 
 encoder:
   mode: pretrained
-  checkpoint: runs/skip_vae_minigrid/best.pt
+  checkpoint: runs/skip_vae_regularized_minigrid/best.pt
   model_type: skip_vae
   latent_dim: 64
   frozen: false
+  skip_dropout: 0.5
+  skip_scale: 0.5
+

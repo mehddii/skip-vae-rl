@@ -28,10 +28,19 @@ class VAEFeatureExtractor(BaseFeaturesExtractor):
         model_type: str,
         latent_dim: int,
         frozen: bool,
+        skip_dropout: float = 0.0,
+        skip_scale: float = 1.0,
     ):
         super().__init__(observation_space, features_dim=latent_dim)
-        self.vae = build_vae(model_type=model_type, in_channels=3, latent_dim=latent_dim)
         payload = torch.load(checkpoint, map_location="cpu")
+        model_cfg = payload.get("config", {}).get("model", {})
+        self.vae = build_vae(
+            model_type=model_type,
+            in_channels=3,
+            latent_dim=latent_dim,
+            skip_dropout=float(model_cfg.get("skip_dropout", skip_dropout)),
+            skip_scale=float(model_cfg.get("skip_scale", skip_scale)),
+        )
         self.vae.load_state_dict(payload["model"])
         self.vae.decoder = nn.Identity()
         if frozen:
@@ -80,6 +89,8 @@ def main() -> None:
                 "model_type": encoder_cfg["model_type"],
                 "latent_dim": int(encoder_cfg["latent_dim"]),
                 "frozen": bool(encoder_cfg.get("frozen", True)),
+                "skip_dropout": float(encoder_cfg.get("skip_dropout", 0.0)),
+                "skip_scale": float(encoder_cfg.get("skip_scale", 1.0)),
             },
             "net_arch": dict(pi=[128, 128], vf=[128, 128]),
         }
@@ -105,18 +116,45 @@ def main() -> None:
     model.learn(total_timesteps=int(cfg["rl"]["total_timesteps"]), progress_bar=True)
     model.save(run_dir / "ppo_model")
 
-    rewards, lengths = evaluate_policy(
-        model,
-        eval_env,
-        n_eval_episodes=int(cfg["rl"].get("eval_episodes", 20)),
-        return_episode_rewards=True,
-    )
+    eval_seeds = cfg["rl"].get("eval_seeds")
+    if eval_seeds is None:
+        eval_seeds = [seed + 1000 + i for i in range(int(cfg["rl"].get("num_eval_seeds", 5)))]
+
+    rewards = []
+    lengths = []
+    per_seed = []
+    episodes_per_seed = int(cfg["rl"].get("eval_episodes_per_seed", cfg["rl"].get("eval_episodes", 5)))
+    for eval_seed in eval_seeds:
+        eval_env.close()
+        eval_env = build_vec_env(cfg["env"]["id"], int(cfg["env"]["image_size"]), int(eval_seed))
+        seed_rewards, seed_lengths = evaluate_policy(
+            model,
+            eval_env,
+            n_eval_episodes=episodes_per_seed,
+            return_episode_rewards=True,
+        )
+        rewards.extend(seed_rewards)
+        lengths.extend(seed_lengths)
+        per_seed.append(
+            {
+                "seed": int(eval_seed),
+                "mean_reward": float(np.mean(seed_rewards)),
+                "std_reward": float(np.std(seed_rewards)),
+                "mean_length": float(np.mean(seed_lengths)),
+                "rewards": [float(r) for r in seed_rewards],
+                "lengths": [int(l) for l in seed_lengths],
+            }
+        )
+
     eval_payload = {
         "mean_reward": float(np.mean(rewards)),
         "std_reward": float(np.std(rewards)),
         "mean_length": float(np.mean(lengths)),
+        "num_eval_seeds": len(eval_seeds),
+        "episodes_per_seed": episodes_per_seed,
         "rewards": [float(r) for r in rewards],
         "lengths": [int(l) for l in lengths],
+        "per_seed": per_seed,
     }
     save_json(Path(run_dir) / "eval.json", eval_payload)
     print(eval_payload)

@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+*.zip
+.ipynb_checkpoints/
+skip-vae-rl.ipynb
+
+runs/*
+!runs/.gitkeep
+
+reports/figures/*
+!reports/figures/.gitkeep
+reports/results_summary.csv
+

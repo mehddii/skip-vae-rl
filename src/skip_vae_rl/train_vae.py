@@ -76,6 +76,8 @@ def main() -> None:
         model_type=cfg["model"]["type"],
         in_channels=int(cfg["model"]["in_channels"]),
         latent_dim=int(cfg["model"]["latent_dim"]),
+        skip_dropout=float(cfg["model"].get("skip_dropout", 0.0)),
+        skip_scale=float(cfg["model"].get("skip_scale", 1.0)),
     ).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=float(cfg["training"]["learning_rate"]))
     beta = float(cfg["model"].get("beta", 1.0))
@@ -142,4 +144,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

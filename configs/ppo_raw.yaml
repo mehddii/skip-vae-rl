@@ -12,8 +12,8 @@ rl:
   batch_size: 128
   n_epochs: 4
   gamma: 0.99
-  eval_episodes: 20
+  num_eval_seeds: 5
+  eval_episodes_per_seed: 5
 
 encoder:
   mode: raw
-
